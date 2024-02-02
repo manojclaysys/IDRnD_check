@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "DashBoard";
+}
+
+<div class="dashboard">
+
+    <img src="~/Images/cunextgen-logo.svg" class="img-responsive" />
+    <div class="button__container">
+        <a href="/VoiceSDK/enroll" class="btn__enroll">Enroll</a>
+        <a href="/VoiceSDK/verify" class="btn__enroll">Verify</a>
+    </div>
+</div>
+
+<style>
+    .dashboard {
+        width: 320px;
+        text-align: center;
+        margin: auto;
+        padding: 50px 0;
+    }
+    .button__container {
+        margin-top: 200px;
+    }
+    .btn__enroll {
+        border: 1px solid #c8102e;
+        background-color: #fff;
+        color: #c8102e;
+        font-size: 1.125em;
+        padding: 12px;
+        min-width: 140px;
+        font-weight: 600;
+        height: 49px;
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        margin: 20px 0;
+    }
+</style>
+

@@ -1,0 +1,258 @@
+﻿
+@{
+    ViewBag.Title = "Verify";
+}
+
+<div class="dashboard">
+
+    <img src="~/Images/cunextgen-logo.svg" class="img-responsive" />
+    <h1>VERIFY</h1>
+    <div class="button__container">
+        <div class="start__recording" style="display:block">
+            <input type="text" class="txt__input" name="username" placeholder="Please enter a user name" id="username" value="" />
+            <button type="button" id="btn__enroll" class="btn__enroll">Start recording</button>
+        </div>
+        <div class="pharse__input" style="display:none">
+            <label>Please say</label>
+            <input type="text" class="txt__input" name="pharse" id="pharse1" value="My voice is my password. Please verify." />
+            <div class="pulsating-circle"></div>
+        </div>
+
+
+        <div class="progress__page" style="display:none">
+            <img src="~/Images/waiting.gif" class="waiting-img">
+            <p class="dvNmText">
+                Please wait while we validate your information, this may take up to 45 seconds.<br>
+                Thank you for your patience.
+            </p>
+        </div>
+
+        <div class="success__page" style="display:none">
+            <i class="fa fa-check-circle fa-circle--green"></i>
+            <h2>Verification passed successfully</h2>
+
+            <a class="btn__enroll" href="/">Return</a>
+        </div>
+        <div class="fail__page" style="display:none">
+            <i class="fa fa-times-circle fa-circle--red"></i>
+            <h2>Verification failed</h2>
+
+            <a class="btn__enroll" href="/">Return</a>
+        </div>
+
+    </div>
+</div>
+
+
+
+<style>
+
+    .fa-circle--green {
+        font-size: 120px;
+        color: green;
+    }
+
+    .fa-circle--red {
+        font-size: 120px;
+        color: red;
+    }
+
+    .dashboard {
+        width: 320px;
+        text-align: center;
+        margin: auto;
+        padding: 50px 0;
+    }
+
+    h1 {
+        margin-top: 70px;
+    }
+
+    h2 {
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+
+    .button__container {
+        margin-top: 120px;
+    }
+
+    .btn__enroll {
+        border: 1px solid #c8102e;
+        background-color: #fff;
+        color: #c8102e;
+        font-size: 1.125em;
+        padding: 12px;
+        min-width: 140px;
+        font-weight: 600;
+        height: 49px;
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        margin: 20px auto;
+        border-radius: 62px;
+        width: 200px;
+    }
+
+        .btn__enroll:hover {
+            color: #ffffff;
+            background: #c8102e;
+        }
+
+    .txt__input {
+        width: 100%;
+        height: 36px;
+        border-radius: 21px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .txt__input--text {
+        background: #e5e3e3;
+    }
+
+
+    .pulsating-circle {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        width: 200px;
+        height: 200px;
+    }
+
+        .pulsating-circle:before {
+            content: "";
+            position: relative;
+            display: block;
+            width: 300%;
+            height: 300%;
+            box-sizing: border-box;
+            margin-left: -100%;
+            margin-top: -100%;
+            border-radius: 300px;
+            background-color: #01a4e9;
+            -webkit-animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+            animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        .pulsating-circle:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border-radius: 300px;
+            -webkit-animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+            animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+        }
+
+    @@-webkit-keyframes pulse-ring {
+        0% {
+            transform: scale(0.33);
+        }
+
+        80%, 100% {
+            opacity: 0;
+        }
+    }
+
+    @@keyframes pulse-ring {
+        0% {
+            transform: scale(0.33);
+        }
+
+        80%, 100% {
+            opacity: 0;
+        }
+    }
+
+    @@-webkit-keyframes pulse-dot {
+        0% {
+            transform: scale(0.8);
+        }
+
+        50% {
+            transform: scale(1);
+        }
+
+        100% {
+            transform: scale(0.8);
+        }
+    }
+
+    @@keyframes pulse-dot {
+        0% {
+            transform: scale(0.8);
+        }
+
+        50% {
+            transform: scale(1);
+        }
+
+        100% {
+            transform: scale(0.8);
+        }
+    }
+</style>
+
+
+<script>
+
+    function displaytext() {
+
+        setTimeout(() => {
+            stopRecording();
+        }, 3000);
+    }
+
+    var recordButton = document.getElementById("btn__enroll");
+    recordButton.addEventListener("click", startVerify);
+
+    function startVerify() {
+        var button__container = document.getElementsByClassName("start__recording");
+        var pharse__input = document.getElementsByClassName("pharse__input");
+        button__container[0].style.display = "none";
+        pharse__input[0].style.display = "block";
+
+        startRecording();
+    }
+
+    function verifymyVoice(blob) {
+        //name of .wav file to use during upload and download (without extendion)
+        var filename = new Date().toISOString();
+        var userID = document.getElementById("username").value;
+        var xhr = new XMLHttpRequest();
+        var progress__page = document.getElementsByClassName("progress__page");
+        var pharse__input = document.getElementsByClassName("pharse__input");
+        progress__page[0].style.display = "block";
+        pharse__input[0].style.display = "none";
+        xhr.onload = function (e) {
+            if (this.readyState === 4) {
+                debugger;
+                var progress__page = document.getElementsByClassName("progress__page");
+                progress__page[0].style.display = "none";
+
+
+                var obj = JSON.parse(e.target.responseText);
+
+                if (obj.probability > 0.7 && obj.SNR > 15) {
+                    var success__page = document.getElementsByClassName("success__page");
+                    success__page[0].style.display = "block";
+                }
+                else {
+                    var fail__page = document.getElementsByClassName("fail__page");
+                    fail__page[0].style.display = "block";
+                }
+            }
+        };
+        var fd = new FormData();
+        fd.append("audio_data", blob, filename);
+        fd.append("userID", userID);
+        xhr.open("POST", "/VoiceSDK/ValidateVoice", true);
+        xhr.send(fd);
+    }
+</script>
